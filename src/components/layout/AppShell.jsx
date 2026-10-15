@@ -79,6 +79,13 @@ function SidebarContent({ user, sellerProfile, logout, onNavigate }) {
       </nav>
 
       <div className="border-t border-white/10 pt-3 mt-3">
+        <a
+          href="/assistance/"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white/70 hover:bg-white/5 hover:text-white"
+        >
+          <span>🛟</span>
+          Assistance
+        </a>
         <button
           type="button"
           onClick={logout}

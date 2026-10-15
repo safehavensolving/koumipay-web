@@ -15,6 +15,8 @@ import { AccountPage } from './pages/AccountPage';
 import { DeleteAccountPage } from './pages/DeleteAccountPage';
 import { GeolocationPage } from './pages/GeolocationPage';
 import { SecurityPage } from './pages/SecurityPage';
+import { SupportPage } from './pages/SupportPage';
+import { PrivacyPage } from './pages/PrivacyPage';
 
 const SOON_ROUTES = [
   { path: '/boutique', title: 'Boutique' },
@@ -63,6 +65,9 @@ function App() {
           />
           <Route path="/otp" element={<OtpVerifyPage />} />
           <Route path="/set-password" element={<SetPasswordPage />} />
+          {/* Pages publiques (URL d'assistance et de confidentialité de l'App Store) — accessibles sans connexion. */}
+          <Route path="/assistance" element={<SupportPage />} />
+          <Route path="/confidentialite" element={<PrivacyPage />} />
 
           <Route element={<RequireToken />}>
             <Route path="/seller-setup" element={<SellerSetupPage />} />

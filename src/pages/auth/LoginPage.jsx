@@ -70,6 +70,9 @@ export function LoginPage() {
               Créer un compte
             </Link>
           </p>
+          <a href="/assistance/" className="text-muted hover:text-navy">
+            Besoin d'aide ? Assistance
+          </a>
         </div>
       </form>
     </AuthLayout>
