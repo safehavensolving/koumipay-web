@@ -1,0 +1,49 @@
+# Build de production publié sur la branche `deploy` à chaque push sur `main`.
+# Hostinger (Git auto-deployment du site koumipay-web) déploie la branche `deploy`
+# telle quelle dans le dossier du site : elle contient uniquement le contenu de dist/
+# (index.html, assets/, assistance/, confidentialite/, .htaccess pour les routes React Router).
+name: Build & publish deploy branch
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-branch
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+        env:
+          VITE_APP_ENV: production
+          VITE_API_BASE_URL: https://app.koumipay.com
+
+      - name: Publish dist/ to the deploy branch
+        run: |
+          set -e
+          cd dist
+          echo "Build $(date -u +%FT%TZ) from $GITHUB_SHA" > BUILD.txt
+          git init -q -b deploy
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "build: $GITHUB_SHA"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
